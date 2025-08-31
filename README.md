@@ -1,6 +1,9 @@
 # testsat
 
 ![Project Screenshot](overview.png)
+ 
+
+![Project Screenshot](dumb.png)
 
 **testsat** is an online digital test platform.
 
@@ -27,5 +30,8 @@
 - [ ] Build test-taking functionality (Student)  
 - [ ] Implement score retrieval (Student)  
 - [ ] Test APIs with Postman/Thunder Client  
+
+
+...write frontend
 - [ ] Connect frontend with backend APIs  
 

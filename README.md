@@ -18,8 +18,8 @@
 - [✔] Create a basic Express server  
 - [✔] Auth template setup
 - [✔] Establish database connection  
-- [ ] Define Student and Admin models  
 - [ ] Implement CRUD routes  
+- [ ] Define Student and Admin models  
 - [ ] Add authentication  
 - [ ] Configure protected routes  
 - [ ] Build test creation and editing (Admin)  

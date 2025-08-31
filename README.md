@@ -16,12 +16,16 @@
 - [✔] Set up new React and Node.js projects  
 - [✔] Install required dependencies  
 - [✔] Create a basic Express server  
-- [✔] Auth template setup
+- [✔] Auth template setup  
 - [✔] Establish database connection  
-- [ ] Implement CRUD routes  
+- [✔] CRUD routes template  
 - [ ] Define Student and Admin models  
-- [ ] Add authentication  
-- [ ] Configure protected routes  
+- [ ] Implement CRUD routes (using models)  
+- [ ] Add authentication (login/register)  
+- [ ] Configure protected routes (JWT middleware)  
 - [ ] Build test creation and editing (Admin)  
 - [ ] Build test-taking functionality (Student)  
 - [ ] Implement score retrieval (Student)  
+- [ ] Test APIs with Postman/Thunder Client  
+- [ ] Connect frontend with backend APIs  
+

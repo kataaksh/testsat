@@ -4,6 +4,11 @@ export const registerUser = (req, res) => {
 }
 
 export const loginUser = (req, res) => {
-    // Registration logic here
+    // Login logic here
     res.status(200).send("User loggedIn");
+}
+
+export const logOut = (req, res) => {
+    // Logout logic here
+    res.status(200).send("User loggedOut");
 }

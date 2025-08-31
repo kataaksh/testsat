@@ -16,7 +16,8 @@
 - [✔] Set up new React and Node.js projects  
 - [✔] Install required dependencies  
 - [✔] Create a basic Express server  
-- [ ] Establish database connection  
+- [✔] Auth template setup
+- [✔] Establish database connection  
 - [ ] Define Student and Admin models  
 - [ ] Implement CRUD routes  
 - [ ] Add authentication  

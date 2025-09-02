@@ -1,64 +1,25 @@
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AddTest from "./components/AddTest";
+import TestViewer from "./components/TestViewer";
+import TestList from "./components/TestList";
 
 const App = () => {
   return (
-    <>
-      <div>
-        <nav>
-          <h1 className="h-10 bg-blue-500 text-center font0bold text-white ">
-            Nav
-          </h1>
-        </nav>
-        <div className="flex bg-amber-50 h-[calc(100vh-2.5rem)]">
-          <div className="w-1/2 bg-slate-200 p-4">
-            <p>
-              Question:
-              What is the value of
-              (
-              12
-              ÷
-              3
-              )
-              +
-              (
-              5
-              ×
-              2
-              )
-              (12÷3)+(5×2) ?
-            </p>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin/add-test" element={<AddTest />} />
+        <Route path="/test-viewer/:id" element={<TestViewer />} />
+        <Route path="/test-list" element={<TestList />} />
+        <Route path="/" element={
+          <div className="flex flex-col items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold mb-4">SATest Platform</h1>
+            <a href="/admin/add-test" className="mb-2 px-4 py-2 bg-blue-600 text-white rounded">Admin: Add Test</a>
+            <a href="/test-list" className="px-4 py-2 bg-green-600 text-white rounded">View Tests</a>
           </div>
-          <div className="p-4 relative">
+        } />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
-            <div className="bg-white border-2 w-fit border-black m-2 p-2">
-              A) 10
-            </div>
-            <div className="bg-white border-2 w-fit border-black m-2 p-2">
-              B) 14
-            </div>
-            <div className="bg-white border-2 w-fit border-black m-2 p-2">
-              C) 16
-            </div>
-            <div className="bg-white border-2 w-fit border-black m-2 p-2">
-              D) 20
-            </div>
-
-
-
-            <div className="flex justify-between gap-56 absolute bottom-0 p-4">
-              <button className="bg-blue-500 text-white p-2 rounded">
-                Previous
-              </button>
-              <button className="bg-blue-500 text-white p-2 rounded">
-                Next
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
-
-export default App
-
+export default App;

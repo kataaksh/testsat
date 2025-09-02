@@ -23,9 +23,10 @@
 - [✔] Auth template setup  
 - [✔] Establish database connection  
 - [✔] CRUD routes template  
-- [ ] CRUD controllers done
-- [ ] Define Student and Admin models  
+- [ ] Define test model
 - [ ] Implement CRUD routes (using models)  
+- [ ] Define admin model    
+- [ ] Define Student model
 - [ ] Add authentication (login/register)  
 - [ ] Configure protected routes (JWT middleware)  
 - [ ] Build test creation and editing (Admin)  
@@ -37,3 +38,7 @@
 ...write frontend
 - [ ] Connect frontend with backend APIs  
 
+
+
+68b72105013cad49c0f91995
+68b72078013cad49c0f91991

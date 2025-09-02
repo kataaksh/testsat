@@ -1,11 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
+import cors from 'cors';
 
 import authRoutes from './routes/auth.js';
-
-
-
 import addTest from './routes/test.js';
 import studentTestRoutes from './routes/studentTest.js';
 
@@ -16,6 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(cors());
 
 connectDB();
 

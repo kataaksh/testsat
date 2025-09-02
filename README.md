@@ -23,8 +23,9 @@
 - [✔] Auth template setup  
 - [✔] Establish database connection  
 - [✔] CRUD routes template  
-- [ ] Define test model
-- [ ] Implement CRUD routes (using models)  
+- [✔] Define test model
+- [✔] Implement CRUD routes (using models)  
+- [✔] Basic frontend to fetch tests
 - [ ] Define admin model    
 - [ ] Define Student model
 - [ ] Add authentication (login/register)  

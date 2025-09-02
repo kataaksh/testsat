@@ -1,5 +1,5 @@
 # testsat
-//access from second account
+
 
 ![Project Screenshot](overview.png)
  
@@ -23,6 +23,7 @@
 - [✔] Auth template setup  
 - [✔] Establish database connection  
 - [✔] CRUD routes template  
+- [ ] CRUD controllers done
 - [ ] Define Student and Admin models  
 - [ ] Implement CRUD routes (using models)  
 - [ ] Add authentication (login/register)  

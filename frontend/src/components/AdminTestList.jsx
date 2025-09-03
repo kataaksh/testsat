@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AdminDashboard from "./AdminDashboard";
 
 const AdminTestList = () => {
   const [tests, setTests] = useState([]);
@@ -44,6 +45,8 @@ const AdminTestList = () => {
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 bg-white rounded shadow">
+     
+     <AdminDashboard />
       <h2 className="text-2xl font-bold mb-4">Admin: Test List</h2>
       {message && <div className="mb-4 text-red-600">{message}</div>}
       {loading && <div className="mb-4 text-gray-600">Loading...</div>}

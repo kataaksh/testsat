@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import LogoutButton from "./LogoutButton";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
   const fetchUsers = async () => {
     const token = localStorage.getItem("token");
@@ -40,7 +43,26 @@ const AdminDashboard = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Admin Dashboard</h2>
+      <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
+
+      {/* Navigation buttons */}
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={() => navigate("/admin/add-test")}
+          className="px-4 py-2 bg-blue-600 text-white rounded"
+        >
+          ➕ Add Test
+        </button>
+        <button
+          onClick={() => navigate("/admin/test-list")}
+          className="px-4 py-2 bg-yellow-600 text-white rounded"
+        >
+          📑 Manage Tests
+        </button>
+        <LogoutButton />
+      </div>
+
+      {/* User Management Table */}
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-200">

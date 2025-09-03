@@ -9,6 +9,7 @@ import EditTest from "./components/EditTest";
 import AuthForm from "./components/AuthForm";
 import AuthSuccess from "./components/AuthSuccess";
 import LogoutButton from "./components/LogoutButton";
+import AdminDashboard from "./components/AdminDashboard"; // ✅ import
 
 // ✅ Protected home page
 const HomePage = () => {
@@ -24,25 +25,23 @@ const HomePage = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-2xl font-bold mb-4">SATest Platform</h1>
+
+      {/* Instead of separate links, admins should use dashboard */}
       <a
-        href="/admin/add-test"
-        className="mb-2 px-4 py-2 bg-blue-600 text-white rounded"
+        href="/admin/dashboard"
+        className="mb-2 px-4 py-2 bg-purple-600 text-white rounded"
       >
-        Admin: Add Test
+        Admin Dashboard
       </a>
-      <a
-        href="/admin/test-list"
-        className="mb-2 px-4 py-2 bg-yellow-600 text-white rounded"
-      >
-        Admin: Test List
-      </a>
+
       <a
         href="/test-list"
         className="px-4 py-2 bg-green-600 text-white rounded"
       >
-        View Tests
+        View Tests (Student)
       </a>
-       {/* 🔴 Show logout only if logged in */}
+
+      {/* 🔴 Show logout only if logged in */}
       {localStorage.getItem("token") && (
         <div className="mt-4">
           <LogoutButton />
@@ -56,14 +55,22 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Admin */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/add-test" element={<AddTest />} />
         <Route path="/admin/test-list" element={<AdminTestList />} />
         <Route path="/admin/edit-test/:id" element={<EditTest />} />
+
+        {/* Student */}
         <Route path="/test-viewer/:id" element={<TestViewer />} />
         <Route path="/test-list" element={<TestList />} />
+
+        {/* Auth */}
         <Route path="/login" element={<AuthForm mode="login" />} />
         <Route path="/signup" element={<AuthForm mode="signup" />} />
         <Route path="/auth-success" element={<AuthSuccess />} />
+
+        {/* Default */}
         <Route path="/" element={<HomePage />} />
       </Routes>
     </BrowserRouter>

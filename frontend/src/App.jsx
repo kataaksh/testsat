@@ -8,6 +8,7 @@ import AdminTestList from "./components/AdminTestList";
 import EditTest from "./components/EditTest";
 import AuthForm from "./components/AuthForm";
 import AuthSuccess from "./components/AuthSuccess";
+import LogoutButton from "./components/LogoutButton";
 
 // ✅ Protected home page
 const HomePage = () => {
@@ -41,6 +42,12 @@ const HomePage = () => {
       >
         View Tests
       </a>
+       {/* 🔴 Show logout only if logged in */}
+      {localStorage.getItem("token") && (
+        <div className="mt-4">
+          <LogoutButton />
+        </div>
+      )}
     </div>
   );
 };

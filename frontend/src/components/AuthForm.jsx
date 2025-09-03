@@ -8,25 +8,37 @@ const AuthForm = ({ mode = "login" }) => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
     try {
-      const endpoint = mode === "signup" ? "/api/v1/auth/signup" : "/api/v1/auth/login";
-      const body = mode === "signup"
-        ? { name, email, password, role }
-        : { email, password };
+      const endpoint =
+        mode === "signup" ? "/api/v1/auth/signup" : "/api/v1/auth/login";
+      const body =
+        mode === "signup"
+          ? { name, email, password, role }
+          : { email, password };
+
       const res = await fetch(`http://localhost:5000${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
       const data = await res.json();
+
       if (res.ok) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.user.role);
+
         setMessage("Success! Redirecting...");
-        window.location.href = "/";
+
+        // ✅ Redirect based on role
+        if (data.user.role === "admin") {
+          window.location.href = "/admin/test-list";
+        } else {
+          window.location.href = "/test-list";
+        }
       } else {
         setMessage(data.message || "Error");
       }
@@ -42,7 +54,9 @@ const AuthForm = ({ mode = "login" }) => {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">{mode === "signup" ? "Sign Up" : "Login"}</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        {mode === "signup" ? "Sign Up" : "Login"}
+      </h2>
       <form onSubmit={handleSubmit}>
         {mode === "signup" && (
           <>
@@ -51,13 +65,13 @@ const AuthForm = ({ mode = "login" }) => {
               className="w-full border rounded px-3 py-2 mb-2"
               placeholder="Name"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               required
             />
             <select
               className="w-full border rounded px-3 py-2 mb-2"
               value={role}
-              onChange={e => setRole(e.target.value)}
+              onChange={(e) => setRole(e.target.value)}
             >
               <option value="student">Student</option>
               <option value="admin">Admin</option>
@@ -69,7 +83,7 @@ const AuthForm = ({ mode = "login" }) => {
           className="w-full border rounded px-3 py-2 mb-2"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
@@ -77,7 +91,7 @@ const AuthForm = ({ mode = "login" }) => {
           className="w-full border rounded px-3 py-2 mb-4"
           placeholder="Password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         <button
@@ -85,7 +99,11 @@ const AuthForm = ({ mode = "login" }) => {
           className="w-full px-4 py-2 bg-blue-600 text-white rounded mb-2"
           disabled={loading}
         >
-          {loading ? "Processing..." : mode === "signup" ? "Sign Up" : "Login"}
+          {loading
+            ? "Processing..."
+            : mode === "signup"
+            ? "Sign Up"
+            : "Login"}
         </button>
       </form>
       <button
@@ -94,7 +112,9 @@ const AuthForm = ({ mode = "login" }) => {
       >
         Continue with Google
       </button>
-      {message && <div className="mt-4 text-center text-red-600">{message}</div>}
+      {message && (
+        <div className="mt-4 text-center text-red-600">{message}</div>
+      )}
     </div>
   );
 };

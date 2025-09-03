@@ -1,23 +1,33 @@
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 const AuthSuccess = () => {
-  const [params] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
+
     if (token) {
       localStorage.setItem("token", token);
-      navigate("/");
-    }
-  }, [params, navigate]);
 
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <span className="text-xl font-semibold">Logging you in...</span>
-    </div>
-  );
+      // decode token to extract role
+      const decoded = jwtDecode(token);
+      localStorage.setItem("role", decoded.role);
+
+      // redirect based on role
+      if (decoded.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/student/dashboard"); // or /test-list
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  return <p>Loading...</p>;
 };
 
 export default AuthSuccess;

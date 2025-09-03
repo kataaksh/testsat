@@ -10,10 +10,12 @@ import AuthForm from "./components/AuthForm";
 import AuthSuccess from "./components/AuthSuccess";
 import LogoutButton from "./components/LogoutButton";
 import AdminDashboard from "./components/AdminDashboard"; // ✅ import
+import StudentDashboard from "./components/StudentDashboard";
 
 // ✅ Protected home page
 const HomePage = () => {
   const navigate = useNavigate();
+  const role = localStorage.getItem("role"); // read role
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,22 +28,27 @@ const HomePage = () => {
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-2xl font-bold mb-4">SATest Platform</h1>
 
-      {/* Instead of separate links, admins should use dashboard */}
-      <a
-        href="/admin/dashboard"
-        className="mb-2 px-4 py-2 bg-purple-600 text-white rounded"
-      >
-        Admin Dashboard
-      </a>
+      {/* ✅ Show Admin Dashboard link only if user is admin */}
+      {role === "admin" && (
+        <a
+          href="/admin/dashboard"
+          className="mb-2 px-4 py-2 bg-purple-600 text-white rounded"
+        >
+          Admin Dashboard
+        </a>
+      )}
 
-      <a
-        href="/test-list"
-        className="px-4 py-2 bg-green-600 text-white rounded"
-      >
-        View Tests (Student)
-      </a>
+      {/* ✅ Show Student Dashboard link only if user is student */}
+      {role === "student" && (
+        <a
+          href="/student/dashboard"
+          className="mb-2 px-4 py-2 bg-green-600 text-white rounded"
+        >
+          Student Dashboard
+        </a>
+      )}
 
-      {/* 🔴 Show logout only if logged in */}
+      {/* Logout for both */}
       {localStorage.getItem("token") && (
         <div className="mt-4">
           <LogoutButton />
@@ -51,10 +58,13 @@ const HomePage = () => {
   );
 };
 
+
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+
+        <Route path="/student/dashboard" element={<StudentDashboard />} />
         {/* Admin */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/add-test" element={<AddTest />} />

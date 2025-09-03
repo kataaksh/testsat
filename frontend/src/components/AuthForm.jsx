@@ -37,7 +37,7 @@ const AuthForm = ({ mode = "login" }) => {
         if (data.user.role === "admin") {
           window.location.href = "/admin/test-list";
         } else {
-          window.location.href = "/test-list";
+          window.location.href = "/student/dashboard";
         }
       } else {
         setMessage(data.message || "Error");

@@ -26,10 +26,10 @@
 - [✔] Define test model
 - [✔] Implement CRUD routes (using models)  
 - [✔] Basic frontend to fetch tests
-- [ ] Define admin model    
-- [ ] Define Student model
-- [ ] Add authentication (login/register)  
-- [ ] Configure protected routes (JWT middleware)  
+- [✔] Define admin model    
+- [✔] Define Student model
+- [✔] Add authentication (login/register)  
+- [] Configure protected routes (JWT middleware)  
 - [ ] Build test creation and editing (Admin)  
 - [ ] Build test-taking functionality (Student)  
 - [ ] Implement score retrieval (Student)  
@@ -37,7 +37,7 @@
 
 
 ...write frontend
-- [ ] Connect frontend with backend APIs  
+- [✔] Connect frontend with backend APIs  
 
 
 

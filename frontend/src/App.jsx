@@ -9,8 +9,12 @@ import EditTest from "./components/EditTest";
 import AuthForm from "./components/AuthForm";
 import AuthSuccess from "./components/AuthSuccess";
 import LogoutButton from "./components/LogoutButton";
-import AdminDashboard from "./components/AdminDashboard"; // ✅ import
+import AdminDashboard from "./components/AdminDashboard";
 import StudentDashboard from "./components/StudentDashboard";
+import Navbar from "./components/Navbar";
+import TestSubmission from "./components/TestSubmission";
+import TestResults from "./components/TestResults";
+import SubmissionHistory from "./components/SubmissionHistory";
 
 // ✅ Protected home page
 const HomePage = () => {
@@ -62,6 +66,7 @@ const HomePage = () => {
 const App = () => {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
 
         <Route path="/student/dashboard" element={<StudentDashboard />} />
@@ -74,6 +79,9 @@ const App = () => {
         {/* Student */}
         <Route path="/test-viewer/:id" element={<TestViewer />} />
         <Route path="/test-list" element={<TestList />} />
+        <Route path="/test-submission/:id" element={<TestSubmission />} />
+        <Route path="/test-results/:submissionId" element={<TestResults />} />
+        <Route path="/submission-history" element={<SubmissionHistory />} />
 
         {/* Auth */}
         <Route path="/login" element={<AuthForm mode="login" />} />

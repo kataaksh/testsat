@@ -1,4 +1,5 @@
 import Test from '../models/Test.js';
+import Submission from '../models/Submission.js';
 
 export const addTest = async (req, res) => {
     try {
@@ -50,6 +51,64 @@ export const getAllTests = async (req, res) => {
         res.json(tests);
     } catch (error) {
         console.error("Error fetching tests:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Get all tests with submission status for authenticated user
+export const getAllTestsWithStatus = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const tests = await Test.find().select('_id testname');
+        
+        // Get user's submissions
+        const userSubmissions = await Submission.find({ userId }).select('testId');
+        const submittedTestIds = userSubmissions.map(sub => sub.testId.toString());
+        
+        // Add status to each test
+        const testsWithStatus = tests.map(test => ({
+            _id: test._id,
+            testname: test.testname,
+            isCompleted: submittedTestIds.includes(test._id.toString())
+        }));
+        
+        res.json(testsWithStatus);
+    } catch (error) {
+        console.error("Error fetching tests with status:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+// Check if user can take a specific test
+export const checkTestAccess = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const testId = req.params.id;
+        
+        // Check if user has already submitted this test
+        const existingSubmission = await Submission.findOne({ userId, testId });
+        
+        if (existingSubmission) {
+            return res.status(403).json({ 
+                message: "You have already completed this test",
+                canTake: false,
+                submissionId: existingSubmission._id
+            });
+        }
+        
+        // Check if test exists
+        const test = await Test.findById(testId);
+        if (!test) {
+            return res.status(404).json({ message: "Test not found" });
+        }
+        
+        res.json({ 
+            message: "Test available",
+            canTake: true,
+            test: test
+        });
+    } catch (error) {
+        console.error("Error checking test access:", error);
         res.status(500).send("Internal Server Error");
     }
 }

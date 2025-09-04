@@ -7,9 +7,10 @@ import session from 'express-session';
 import './config/passport.js';
 import authRoutes from './routes/auth.js';
 import addTest from './routes/test.js';
-import studentTestRoutes from './routes/studentTest.js';
+// import studentTestRoutes from './routes/studentTest.js';
 import adminTestRoutes from './routes/adminTest.js';
 import adminRoutes from "./routes/adminRoutes.js";
+import submissionRoutes from './routes/submission.js';
 
 
 
@@ -36,9 +37,10 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/test', addTest); 
-app.use('/api/v1/student/test', studentTestRoutes);
+// app.use('/api/v1/student/test', studentTestRoutes);
 app.use('/api/v1/admin', adminTestRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use('/api/v1/submission', submissionRoutes);
 
 
 app.listen(PORT, () => {

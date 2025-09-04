@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const AuthForm = ({ mode = "login" }) => {
   const [email, setEmail] = useState("");
@@ -7,6 +8,41 @@ const AuthForm = ({ mode = "login" }) => {
   const [role, setRole] = useState("student");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // Check if user is already authenticated and redirect
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userRole = localStorage.getItem("role");
+    
+    if (token && userRole) {
+      // User is already logged in, redirect to appropriate dashboard
+      if (userRole === "admin") {
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        navigate("/student/dashboard", { replace: true });
+      }
+      return;
+    }
+
+    // Check for OAuth errors in URL params
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    
+    if (error) {
+      const errorMessages = {
+        oauth_error: "Google authentication failed. Please try again.",
+        no_user: "Google authentication did not return user information.",
+        token_error: "Failed to generate authentication token.",
+        google: "Google authentication was cancelled or failed."
+      };
+      
+      setMessage(errorMessages[error] || "Authentication error occurred.");
+      
+      // Clear the error from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,6 +148,7 @@ const AuthForm = ({ mode = "login" }) => {
       >
         Continue with Google
       </button>
+      
       {message && (
         <div className="mt-4 text-center text-red-600">{message}</div>
       )}

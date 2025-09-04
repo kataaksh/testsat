@@ -4,7 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 const emptyQuestion = {
   question: "",
   options: ["", "", "", ""],
-  answer: ""
+  answer: "",
+  explanation: ""
 };
 
 const EditTest = () => {
@@ -43,7 +44,12 @@ const EditTest = () => {
   };
 
   const addQuestion = () => {
-    setQuestions([...questions, { ...emptyQuestion }]);
+    setQuestions([...questions, {
+      question: "",
+      options: ["", "", "", ""],
+      answer: "",
+      explanation: ""
+    }]);
   };
 
   const removeQuestion = (idx) => {
@@ -133,6 +139,16 @@ const EditTest = () => {
                 value={q.answer}
                 onChange={e => handleQuestionChange(idx, "answer", e.target.value)}
                 required
+              />
+            </div>
+            <div>
+              <label className="block font-medium mb-1">Explanation (Optional)</label>
+              <textarea
+                className="w-full border rounded px-3 py-2"
+                placeholder="Explain why this is the correct answer..."
+                value={q.explanation || ""}
+                onChange={e => handleQuestionChange(idx, "explanation", e.target.value)}
+                rows="3"
               />
             </div>
           </div>

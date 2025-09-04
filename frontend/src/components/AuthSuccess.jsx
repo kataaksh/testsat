@@ -1,33 +1,84 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 
 const AuthSuccess = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
+    const handleAuth = async () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
 
-    if (token) {
-      localStorage.setItem("token", token);
+        console.log("AuthSuccess: Token received:", token ? "Yes" : "No");
 
-      // decode token to extract role
-      const decoded = jwtDecode(token);
-      localStorage.setItem("role", decoded.role);
+        if (!token) {
+          console.log("AuthSuccess: No token found, redirecting to login");
+          setError("No authentication token received");
+          setTimeout(() => navigate("/login"), 2000);
+          return;
+        }
 
-      // redirect based on role
-      if (decoded.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/student/dashboard"); // or /test-list
+        // Validate token format
+        if (token.split('.').length !== 3) {
+          console.log("AuthSuccess: Invalid token format");
+          setError("Invalid token format");
+          setTimeout(() => navigate("/login"), 2000);
+          return;
+        }
+
+        localStorage.setItem("token", token);
+
+        // Decode token to extract role
+        const decoded = jwtDecode(token);
+        console.log("AuthSuccess: Decoded token:", decoded);
+        
+        if (!decoded.role) {
+          console.log("AuthSuccess: No role in token");
+          setError("Invalid token - no role found");
+          setTimeout(() => navigate("/login"), 2000);
+          return;
+        }
+
+        localStorage.setItem("role", decoded.role);
+
+        console.log("AuthSuccess: Redirecting to dashboard for role:", decoded.role);
+
+        // Small delay to ensure localStorage is fully updated before navigation
+        setTimeout(() => {
+          if (decoded.role === "admin") {
+            navigate("/admin/dashboard", { replace: true });
+          } else {
+            navigate("/student/dashboard", { replace: true });
+          }
+        }, 100);
+      } catch (err) {
+        console.error("AuthSuccess: Error processing authentication:", err);
+        setError("Authentication processing failed");
+        setTimeout(() => navigate("/login"), 2000);
       }
-    } else {
-      navigate("/login");
-    }
+    };
+
+    handleAuth();
   }, [navigate]);
 
-  return <p>Loading...</p>;
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <p className="text-red-600 mb-4">Authentication Error: {error}</p>
+        <p className="text-gray-600">Redirecting to login...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <p className="text-lg mb-4">Processing authentication...</p>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>
+  );
 };
 
 export default AuthSuccess;

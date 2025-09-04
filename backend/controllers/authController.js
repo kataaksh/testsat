@@ -71,16 +71,33 @@ export const googleAuthRedirect = passport.authenticate("google", {
 
 export const googleAuthCallback = (req, res, next) => {
   passport.authenticate("google", async (err, user) => {
-    if (err || !user) {
-      return res.redirect("http://localhost:5173/login?error=google");
+    console.log("Google OAuth callback - Error:", err);
+    console.log("Google OAuth callback - User:", user);
+
+    if (err) {
+      console.error("Google OAuth error:", err);
+      return res.redirect("http://localhost:5173/login?error=oauth_error");
     }
 
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET
-    );
+    if (!user) {
+      console.error("Google OAuth - No user returned");
+      return res.redirect("http://localhost:5173/login?error=no_user");
+    }
 
-    // Redirect to frontend with token
-    res.redirect(`http://localhost:5173/auth-success?token=${token}`);
+    try {
+      const token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+
+      console.log("Generated JWT token for user:", user.email, "with role:", user.role);
+
+      // Redirect to frontend with token
+      res.redirect(`http://localhost:5173/auth-success?token=${token}`);
+    } catch (tokenError) {
+      console.error("JWT token generation error:", tokenError);
+      res.redirect("http://localhost:5173/login?error=token_error");
+    }
   })(req, res, next);
 };

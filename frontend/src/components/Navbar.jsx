@@ -41,7 +41,7 @@ const Navbar = () => {
             {/* Student Links */}
             {role === "student" && (
               <>
-                <Link
+                {/* <Link
                   to="/student/dashboard"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
                     isActive("/student/dashboard") ? "bg-blue-700" : "hover:bg-blue-500"
@@ -56,14 +56,14 @@ const Navbar = () => {
                   }`}
                 >
                   📚 Tests
-                </Link>
+                </Link> */}
                 <Link
                   to="/submission-history"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
                     isActive("/submission-history") ? "bg-blue-700" : "hover:bg-blue-500"
                   }`}
                 >
-                  📋 History
+                  📋 Attempts
                 </Link>
               </>
             )}

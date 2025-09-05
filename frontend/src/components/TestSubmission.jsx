@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 const TestSubmission = () => {
@@ -11,10 +11,80 @@ const TestSubmission = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [startTime] = useState(Date.now());
+  const [showDesmos, setShowDesmos] = useState(false);
+  const [showScientific, setShowScientific] = useState(false);
+  const desmosRef = useRef(null);
+  const scientificRef = useRef(null);
+  const desmosCalculator = useRef(null);
+  const scientificCalculator = useRef(null);
 
   useEffect(() => {
     checkTestAccess();
+    loadDesmosAPI();
   }, [id]);
+
+  const loadDesmosAPI = () => {
+    // Check if Desmos API is already loaded
+    if (window.Desmos) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    const apiKey = import.meta.env.VITE_DESMOS_API_KEY || 'dcb31709b452b1cf9dc26972add0fda6'; // Default demo key
+    script.src = `https://www.desmos.com/api/v1.11/calculator.js?apiKey=${apiKey}`;
+    script.async = true;
+    document.head.appendChild(script);
+  };
+
+  const initializeDesmosCalculator = () => {
+    if (desmosRef.current && window.Desmos && !desmosCalculator.current) {
+      desmosCalculator.current = window.Desmos.GraphingCalculator(desmosRef.current, {
+        expressions: true,
+        settingsMenu: true,
+        zoomButtons: true,
+        expressionsTopbar: false,
+        pointsOfInterest: false,
+        trace: false,
+        border: false,
+        lockViewport: false,
+        expressionsCollapsed: true,
+      });
+    }
+  };
+
+  const initializeScientificCalculator = () => {
+    if (scientificRef.current && window.Desmos && !scientificCalculator.current) {
+      scientificCalculator.current = window.Desmos.ScientificCalculator(scientificRef.current, {
+        expressions: false,
+        settingsMenu: false,
+        border: false
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (showDesmos) {
+      const timer = setTimeout(() => {
+        initializeDesmosCalculator();
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (desmosCalculator.current) {
+      desmosCalculator.current.destroy();
+      desmosCalculator.current = null;
+    }
+  }, [showDesmos]);
+
+  useEffect(() => {
+    if (showScientific) {
+      const timer = setTimeout(() => {
+        initializeScientificCalculator();
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (scientificCalculator.current) {
+      scientificCalculator.current.destroy();
+      scientificCalculator.current = null;
+    }
+  }, [showScientific]);
 
   const checkTestAccess = async () => {
     try {
@@ -141,8 +211,46 @@ const TestSubmission = () => {
     );
   }
 
+  const handleSaveAndExit = () => {
+    handleSubmit();
+    navigate("/test-list");
+  };
+
   return (
-    <div className="max-w-4xl mx-auto mt-6 p-6">
+    <div className="max-w-6xl mx-auto mt-6 p-6">
+      {/* Navbar with Calculator Buttons */}
+      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div className="flex justify-center space-x-4">
+          <button
+            onClick={() => {
+              setShowDesmos(!showDesmos);
+              setShowScientific(false);
+            }}
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              showDesmos
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            📊 Desmos Calculator
+          </button>
+          <button
+            onClick={() => {
+              setShowScientific(!showScientific);
+              setShowDesmos(false);
+            }}
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              showScientific
+                ? "bg-green-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            🧮 Scientific Calculator
+          </button>
+          <button className="px-6 py-2 rounded-lg font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200" onClick={handleSaveAndExit}>Leave</button>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
@@ -153,7 +261,7 @@ const TestSubmission = () => {
         </div>
         
         {/* Progress Bar */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <div className="flex justify-between text-sm text-gray-600 mb-1">
             <span>Progress: {getProgress()}%</span>
             <span>{answers.filter(a => a !== "").length}/{test.questions.length} answered</span>
@@ -164,10 +272,10 @@ const TestSubmission = () => {
               style={{ width: `${getProgress()}%` }}
             ></div>
           </div>
-        </div>
+        </div> */}
 
         {/* Question Navigation */}
-        <div className="flex flex-wrap gap-2 mb-4">
+        {/* <div className="flex flex-wrap gap-2 mb-4">
           {test.questions.map((_, index) => (
             <button
               key={index}
@@ -183,40 +291,88 @@ const TestSubmission = () => {
               {index + 1}
             </button>
           ))}
-        </div>
+        </div> */}
       </div>
 
-      {/* Current Question */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="mb-4">
-          <span className="text-sm text-gray-500">Question {currentQuestion + 1} of {test.questions.length}</span>
-          <h2 className="text-xl font-semibold text-gray-800 mt-2">
-            {test.questions[currentQuestion].question}
-          </h2>
+      {/* Question and Calculator Layout */}
+      <div className="flex gap-6 mb-6">
+        {/* Current Question */}
+        <div className={`bg-white rounded-lg shadow-md p-6 transition-all duration-300 ${
+          showDesmos || showScientific ? "w-1/2" : "w-full"
+        }`}>
+          <div className="mb-4">
+            <span className="text-sm text-gray-500">Question {currentQuestion + 1} of {test.questions.length}</span>
+            <h2 className="text-xl font-semibold text-gray-800 mt-2">
+              {test.questions[currentQuestion].question}
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {test.questions[currentQuestion].options.map((option, optionIndex) => (
+              <label
+                key={optionIndex}
+                className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
+                  answers[currentQuestion] === option
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name={`question-${currentQuestion}`}
+                  value={option}
+                  checked={answers[currentQuestion] === option}
+                  onChange={(e) => handleAnswerChange(currentQuestion, e.target.value)}
+                  className="mr-3"
+                />
+                <span className="text-gray-700">{option}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div className="space-y-3">
-          {test.questions[currentQuestion].options.map((option, optionIndex) => (
-            <label
-              key={optionIndex}
-              className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
-                answers[currentQuestion] === option
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-              }`}
-            >
-              <input
-                type="radio"
-                name={`question-${currentQuestion}`}
-                value={option}
-                checked={answers[currentQuestion] === option}
-                onChange={(e) => handleAnswerChange(currentQuestion, e.target.value)}
-                className="mr-3"
-              />
-              <span className="text-gray-700">{option}</span>
-            </label>
-          ))}
-        </div>
+        {/* Calculator Area */}
+        {(showDesmos || showScientific) && (
+          <div className="w-1/2 bg-white rounded-lg shadow-md p-4">
+            {showDesmos && (
+              <div className="h-full">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Desmos Calculator</h3>
+                  <button
+                    onClick={() => setShowDesmos(false)}
+                    className="text-gray-500 hover:text-gray-700 text-xl"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div
+                  ref={desmosRef}
+                  className="w-full h-96 border border-gray-200 rounded-lg"
+                  style={{ minHeight: '384px' }}
+                ></div>
+              </div>
+            )}
+            
+            {showScientific && (
+              <div className="h-full">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">Scientific Calculator</h3>
+                  <button
+                    onClick={() => setShowScientific(false)}
+                    className="text-gray-500 hover:text-gray-700 text-xl"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div
+                  ref={scientificRef}
+                  className="w-full h-96 border border-gray-200 rounded-lg"
+                  style={{ minHeight: '384px' }}
+                ></div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Navigation Buttons */}
@@ -252,14 +408,14 @@ const TestSubmission = () => {
       </div>
 
       {/* Warning for unanswered questions */}
-      {answers.some(answer => answer === "") && (
+      {/* {answers.some(answer => answer === "") && (
         <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <p className="text-yellow-800">
             ⚠️ You have {answers.filter(a => a === "").length} unanswered questions. 
             You can submit anyway, but unanswered questions will be marked as incorrect.
           </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

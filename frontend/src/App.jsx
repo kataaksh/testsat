@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 
 import AddTest from "./components/AddTest";
@@ -30,43 +30,51 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold mb-4">SATest Platform</h1>
+      <h1 className="text-2xl font-bold mb-4">{localStorage.getItem("username") 
+    ? `Welcome ${localStorage.getItem("username")}` 
+    : "Welcome Guest"}</h1>
 
       {/* ✅ Show Admin Dashboard link only if user is admin */}
       {role === "admin" && (
-        <a
-          href="/admin/dashboard"
+        <Link
+          to="/admin/dashboard"
           className="mb-2 px-4 py-2 bg-purple-600 text-white rounded"
         >
           Admin Dashboard
-        </a>
+        </Link>
       )}
 
       {/* ✅ Show Student Dashboard link only if user is student */}
       {role === "student" && (
-        <a
-          href="/student/dashboard"
+        <>
+        {/* <Link
+          to="/student/dashboard"
           className="mb-2 px-4 py-2 bg-green-600 text-white rounded"
         >
           Student Dashboard
-        </a>
+        </Link> */}
+        <TestList />
+        </>
       )}
 
       {/* Logout for both */}
-      {localStorage.getItem("token") && (
+      {/* {localStorage.getItem("token") && (
         <div className="mt-4">
           <LogoutButton />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
 
-const App = () => {
+const AppContent = () => {
+  const location = useLocation();
+  const hideNavbar = location.pathname.startsWith('/test-submission/');
+
   return (
-    <BrowserRouter>
-      <Navbar />
+    <>
+      {!hideNavbar && <Navbar />}
       <Routes>
 
         <Route path="/student/dashboard" element={<StudentDashboard />} />
@@ -91,6 +99,14 @@ const App = () => {
         {/* Default */}
         <Route path="/" element={<HomePage />} />
       </Routes>
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 };

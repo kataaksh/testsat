@@ -10,7 +10,7 @@ const StudentDashboard = () => {
       <div className="flex flex-col gap-4">
         <Link
           to="/test-list"
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-black text-white rounded"
         >
           📚 View Available Tests
         </Link>

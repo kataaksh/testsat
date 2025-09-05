@@ -132,7 +132,7 @@ const AuthForm = ({ mode = "login" }) => {
         />
         <button
           type="submit"
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded mb-2"
+          className="w-full px-4 py-2 bg-black text-white rounded mb-2"
           disabled={loading}
         >
           {loading

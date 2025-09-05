@@ -198,7 +198,7 @@ const TestSubmission = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
       </div>
     );
   }
@@ -228,7 +228,7 @@ const TestSubmission = () => {
             }}
             className={`px-6 py-2 rounded-lg font-medium transition-colors ${
               showDesmos
-                ? "bg-blue-600 text-white"
+                ? "bg-black text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
@@ -255,7 +255,7 @@ const TestSubmission = () => {
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-gray-800">{test.testname}</h1>
-          <div className={`text-lg font-bold ${timeLeft < 300 ? 'text-red-600' : 'text-blue-600'}`}>
+          <div className={`text-lg font-bold ${timeLeft < 300 ? 'text-red-600' : 'text-black'}`}>
             ⏱️ {formatTime(timeLeft)}
           </div>
         </div>
@@ -268,7 +268,7 @@ const TestSubmission = () => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-black h-2 rounded-full transition-all duration-300"
               style={{ width: `${getProgress()}%` }}
             ></div>
           </div>
@@ -282,7 +282,7 @@ const TestSubmission = () => {
               onClick={() => setCurrentQuestion(index)}
               className={`w-10 h-10 rounded-full text-sm font-medium ${
                 currentQuestion === index
-                  ? "bg-blue-600 text-white"
+                  ? "bg-black text-white"
                   : answers[index] !== ""
                   ? "bg-green-500 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -313,7 +313,7 @@ const TestSubmission = () => {
                 key={optionIndex}
                 className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
                   answers[currentQuestion] === option
-                    ? "border-blue-500 bg-blue-50"
+                    ? "border-black bg-black-50"
                     : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                 }`}
               >
@@ -390,7 +390,7 @@ const TestSubmission = () => {
             {currentQuestion < test.questions.length - 1 ? (
               <button
                 onClick={() => setCurrentQuestion(currentQuestion + 1)}
-                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="px-6 py-2 bg-black text-white rounded hover:bg-black"
               >
                 Next →
               </button>

@@ -63,7 +63,7 @@ const SubmissionHistory = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
       </div>
     );
   }
@@ -80,7 +80,7 @@ const SubmissionHistory = () => {
             <p className="text-gray-500 mb-6">Take your first test to see your results here!</p>
             <button
               onClick={() => navigate("/test-list")}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+              className="px-6 py-3 bg-black text-white rounded-lg hover:bg-black font-medium"
             >
               Browse Tests
             </button>
@@ -89,8 +89,8 @@ const SubmissionHistory = () => {
           <>
             {/* Summary Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-blue-50 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-blue-600">{submissions.length}</div>
+              <div className="bg-black-50 rounded-lg p-4 text-center">
+                <div className="text-2xl font-bold text-black">{submissions.length}</div>
                 <div className="text-sm text-gray-600">Total Tests</div>
               </div>
               <div className="bg-green-50 rounded-lg p-4 text-center">
@@ -157,7 +157,7 @@ const SubmissionHistory = () => {
                       <td className="py-4 px-4 text-center">
                         <button
                           onClick={() => navigate(`/test-results/${submission._id}`)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
+                          className="px-4 py-2 bg-black text-white rounded hover:bg-black text-sm font-medium"
                         >
                           View Details
                         </button>

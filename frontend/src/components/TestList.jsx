@@ -42,7 +42,7 @@ const TestList = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
       </div>
     );
   }
@@ -84,7 +84,7 @@ const TestList = () => {
                     </button>
                   ) : (
                     <button
-                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      className="px-4 py-2 bg-black text-white rounded hover:bg-black"
                       onClick={() => handleTakeTest(test._id, test.isCompleted)}
                     >
                       Take Test

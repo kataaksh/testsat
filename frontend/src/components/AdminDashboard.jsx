@@ -49,7 +49,7 @@ const AdminDashboard = () => {
       <div className="flex gap-4 mb-6">
         <button
           onClick={() => navigate("/admin/add-test")}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-black text-white rounded"
         >
           ➕ Add Test
         </button>

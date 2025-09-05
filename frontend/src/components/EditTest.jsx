@@ -163,7 +163,7 @@ const EditTest = () => {
         <div>
           <button
             type="submit"
-            className="px-6 py-2 bg-blue-600 text-white rounded"
+            className="px-6 py-2 bg-black text-white rounded"
             disabled={loading}
           >
             {loading ? "Updating..." : "Update Test"}

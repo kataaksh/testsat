@@ -72,7 +72,7 @@ const TestViewer = () => {
                 key={idx}
                 className={`block border rounded px-4 py-2 cursor-pointer transition ${
                   selectedOption === idx
-                    ? "border-blue-500 bg-blue-50"
+                    ? "border-black bg-black-50"
                     : "hover:bg-zinc-700"
                 }`}
               >
@@ -101,7 +101,7 @@ const TestViewer = () => {
             <button
               onClick={handleNext}
               disabled={currentQuestionIdx === questions.length - 1}
-              className="px-4 py-2 bg-blue-600 text-white rounded disabled:bg-gray-300"
+              className="px-4 py-2 bg-black text-white rounded disabled:bg-gray-300"
             >
               Next
             </button>

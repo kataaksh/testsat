@@ -57,7 +57,7 @@ const TestResults = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
       </div>
     );
   }
@@ -104,7 +104,7 @@ const TestResults = () => {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
             <div className="bg-white rounded-lg p-4 shadow">
-              <div className="text-2xl font-bold text-blue-600">{results.score}</div>
+              <div className="text-2xl font-bold text-black">{results.score}</div>
               <div className="text-sm text-gray-600">Correct Answers</div>
             </div>
             <div className="bg-white rounded-lg p-4 shadow">
@@ -124,7 +124,7 @@ const TestResults = () => {
         <div className="flex flex-wrap gap-4 justify-center">
           <button
             onClick={() => setShowReview(!showReview)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+            className="px-6 py-3 bg-black text-white rounded-lg hover:bg-black font-medium"
           >
             {showReview ? "Hide Review" : "Show Detailed Review"}
           </button>

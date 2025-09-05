@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { CircleUserRound } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -13,12 +16,26 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   if (!token) return null; // Don't show navbar if not logged in
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="bg-blue-600 text-white shadow-lg">
+    <nav className="bg-black text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -32,7 +49,7 @@ const Navbar = () => {
             <Link
               to="/"
               className={`px-3 py-2 rounded-md text-sm font-medium ${
-                isActive("/") ? "bg-blue-700" : "hover:bg-blue-500"
+                isActive("/") ? "bg-black" : "hover:bg-black"
               }`}
             >
               🏠 Home
@@ -44,7 +61,7 @@ const Navbar = () => {
                 {/* <Link
                   to="/student/dashboard"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/student/dashboard") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/student/dashboard") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📊 Dashboard
@@ -52,7 +69,7 @@ const Navbar = () => {
                 <Link
                   to="/test-list"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/test-list") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/test-list") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📚 Tests
@@ -60,7 +77,7 @@ const Navbar = () => {
                 <Link
                   to="/submission-history"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/submission-history") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/submission-history") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📋 Attempts
@@ -74,7 +91,7 @@ const Navbar = () => {
                 <Link
                   to="/admin/dashboard"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/admin/dashboard") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/admin/dashboard") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   🎛️ Dashboard
@@ -82,7 +99,7 @@ const Navbar = () => {
                 <Link
                   to="/admin/test-list"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/admin/test-list") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/admin/test-list") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📝 Manage Tests
@@ -90,7 +107,7 @@ const Navbar = () => {
                 <Link
                   to="/admin/add-test"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/admin/add-test") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/admin/add-test") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   ➕ Add Test
@@ -98,28 +115,62 @@ const Navbar = () => {
               </>
             )}
 
-            {/* User Info & Logout */}
-            <div className="flex items-center space-x-4 ml-6 border-l border-blue-500 pl-6">
-              <span className="text-sm">
-                👤 {role === "admin" ? "Admin" : "Student"}
-              </span>
+            {/* User Dropdown */}
+            <div className="relative ml-6" ref={dropdownRef}>
               <button
-                onClick={handleLogout}
-                className="px-3 py-2 rounded-md text-sm font-medium bg-red-600 hover:bg-red-700"
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 transition-colors"
               >
-                🚪 Logout
+                <CircleUserRound size={20} />
+                <span>{role === "admin" ? "Admin" : "Student"}</span>
               </button>
+              
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
+                  <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                    <div className="font-medium">{role === "admin" ? "Admin" : "Student"}</div>
+                    <div className="text-xs text-gray-500">{localStorage.getItem("username") || "User"}</div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setShowDropdown(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    🚪 Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile User Dropdown */}
+          <div className="md:hidden relative" ref={dropdownRef}>
             <button
-              onClick={handleLogout}
-              className="px-3 py-2 rounded-md text-sm font-medium bg-red-600 hover:bg-red-700"
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 transition-colors"
             >
-              Logout
+              <CircleUserRound size={20} />
             </button>
+            
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
+                <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                  <div className="font-medium">{role === "admin" ? "Admin" : "Student"}</div>
+                  <div className="text-xs text-gray-500">{localStorage.getItem("username") || "User"}</div>
+                </div>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setShowDropdown(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                >
+                  🚪 Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -129,7 +180,7 @@ const Navbar = () => {
             <Link
               to="/"
               className={`px-3 py-2 rounded-md text-sm font-medium ${
-                isActive("/") ? "bg-blue-700" : "hover:bg-blue-500"
+                isActive("/") ? "bg-black" : "hover:bg-black"
               }`}
             >
               🏠 Home
@@ -140,7 +191,7 @@ const Navbar = () => {
                 <Link
                   to="/student/dashboard"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/student/dashboard") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/student/dashboard") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📊 Dashboard
@@ -148,7 +199,7 @@ const Navbar = () => {
                 <Link
                   to="/test-list"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/test-list") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/test-list") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📚 Tests
@@ -156,7 +207,7 @@ const Navbar = () => {
                 <Link
                   to="/submission-history"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/submission-history") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/submission-history") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📋 History
@@ -169,7 +220,7 @@ const Navbar = () => {
                 <Link
                   to="/admin/dashboard"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/admin/dashboard") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/admin/dashboard") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   🎛️ Dashboard
@@ -177,7 +228,7 @@ const Navbar = () => {
                 <Link
                   to="/admin/test-list"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/admin/test-list") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/admin/test-list") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   📝 Manage Tests
@@ -185,7 +236,7 @@ const Navbar = () => {
                 <Link
                   to="/admin/add-test"
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive("/admin/add-test") ? "bg-blue-700" : "hover:bg-blue-500"
+                    isActive("/admin/add-test") ? "bg-black" : "hover:bg-black"
                   }`}
                 >
                   ➕ Add Test

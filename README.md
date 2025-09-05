@@ -29,10 +29,10 @@
 - [✔] Define admin model    
 - [✔] Define Student model
 - [✔] Add authentication (login/register)  
-- [] Configure protected routes (JWT middleware)  
-- [ ] Build test creation and editing (Admin)  
-- [ ] Build test-taking functionality (Student)  
-- [ ] Implement score retrieval (Student)  
+- [✔] Configure protected routes (JWT middleware)  
+- [✔️] Build test creation and editing (Admin)  
+- [✔️] Build test-taking functionality (Student)  
+- [✔️] Implement score retrieval (Student)  
 - [ ] Test APIs with Postman/Thunder Client  
 
 
